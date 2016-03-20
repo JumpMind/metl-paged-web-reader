@@ -1,0 +1,7 @@
+<ui>
+	<component-ui componentId="Paged Web Reader"
+                id="Paged Web Reader UI">
+		<iconImage>/metl-paged-web-48x48-color.png</iconImage>
+		<className>org.jumpmind.metl.ui.views.design.EditWebPanel</className>
+	</component-ui>
+</ui>

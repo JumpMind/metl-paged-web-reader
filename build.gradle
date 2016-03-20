@@ -1,0 +1,59 @@
+import java.text.SimpleDateFormat
+
+apply plugin: 'eclipse-wtp'
+apply plugin: 'java'
+apply plugin: 'distribution'
+
+sourceCompatibility=1.8
+targetCompatibility=1.8   
+    
+repositories {
+    maven { url "http://maven.jumpmind.com/repo" }
+    mavenCentral()
+}
+
+configurations {
+	zip
+}
+
+sourceSets.main.compileClasspath += [configurations.zip]
+
+eclipse {
+  classpath {
+    plusConfigurations += [configurations.zip]
+  }
+}
+
+ext {
+}
+
+distributions {
+    plugin {
+        baseName = 'paged-web-reader'
+        contents {
+            from jar
+            from configurations.zip
+        }
+    }
+}
+
+dependencies {
+    compile "org.jumpmind.metl:metl-core:1.1.1"
+    compile "org.jdom:jdom2:$jdomVersion"
+}
+   
+task develop {
+    description 'Generates Eclipse artifacts and sets up your development environment'
+    dependsOn tasks.cleanEclipse, tasks.cleanEclipseWtp, tasks.eclipse, tasks.eclipseWtp
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": project.name,
+                   "Implementation-Version": appVersion,
+                   "Project-Artifact": project.name,                       
+                   "Build-Version": buildNumber,
+                   "Build-Time": new SimpleDateFormat("yyyyMMdd-HHmm").format(new Date()),
+                   "Build-Scm-Version": scmVersion)
+    }
+}
